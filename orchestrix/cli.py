@@ -1,7 +1,6 @@
 from orchestrix.inventory import Inventory
 from orchestrix.ssh import SSHConnection
 
-
 def main():
     inventory=Inventory('inventory.ini')
 
