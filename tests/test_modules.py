@@ -19,6 +19,7 @@ def test_ping_module():
 
 
 class FakeCommandConnection:
+    
     def execute(self,command):
         return f"executed: {command}"
 
