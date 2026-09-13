@@ -39,14 +39,15 @@ def main():
 
     args=parser.parse_args()
 
-    if args.module!="command":
-        parser.error(f"Unsupported module '{args.module}'. Only 'command' module is supported.")
-
     inventory=Inventory(args.inventory)
 
     executor=Executor(inventory)
 
-    result=executor.run(args.host, args.args)
+    try:
+        result=executor.run(args.host,args.module,args.args)
+
+    except ValueError as error:
+        parser.error(str(error))
 
     print(f"\n{args.host} | {'SUCCESS' if result.success else 'FAILED'}")
 
