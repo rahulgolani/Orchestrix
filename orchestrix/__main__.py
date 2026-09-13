@@ -1,5 +1,5 @@
 import argparse
-
+from orchestrix.exceptions import  OrchestrixError
 
 from orchestrix.inventory import Inventory
 from orchestrix.executor import Executor
@@ -46,8 +46,11 @@ def main():
     try:
         result=executor.run(args.host,args.module,args.args)
 
-    except ValueError as error:
-        parser.error(str(error))
+    except OrchestrixError as error:
+        # parser.error(str(error))
+        print(f"\n{args.host} | FAILED")
+        print(str(error))
+        return
 
     print(f"\n{args.host} | {'SUCCESS' if result.success else 'FAILED'}")
 

@@ -1,6 +1,7 @@
 from orchestrix.ssh import SSHConnection
 from orchestrix.modules.command import CommandModule
 from orchestrix.modules.ping import PingModule
+from orchestrix.exceptions import (HostNotFoundError, ModuleNotFoundError)
 
 class Executor:
     def __init__(self,inventory):
@@ -14,12 +15,12 @@ class Executor:
         host=self.inventory.get_host(hostname)
 
         if not host:
-            raise ValueError(f"Host '{hostname}' not found in inventory")
+            raise HostNotFoundError(f"Host '{hostname}' not found in inventory")
 
         module=self.modules.get(module_name)
 
         if not module:
-            raise ValueError(f"Module '{module_name}' not found")
+            raise ModuleNotFoundError(f"Module '{module_name}' not found")
 
         connection=SSHConnection(
             host=host['host'],

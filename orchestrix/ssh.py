@@ -1,5 +1,6 @@
 import paramiko
 from orchestrix.result import CommandResult
+from orchestrix.exceptions import (ConnectionError, AuthenticationError)
 
 class SSHConnection:
     def __init__(self,host,username,password=None,port=2220):
@@ -15,12 +16,24 @@ class SSHConnection:
 
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-        self.client.connect(
-            hostname=self.host,
-            port=self.port,
-            username=self.username,
-            password=self.password,
-            )
+        try:
+
+            self.client.connect(
+                hostname=self.host,
+                port=self.port,
+                username=self.username,
+                password=self.password,
+                )
+        except paramiko.AuthenticationException as error:
+            self.client.close()
+            self.client=None
+            raise AuthenticationError(f"Authentication failed for {self.username} @ {self.host}") from error
+
+        except (paramiko.SSHException, OSError,) as error:
+            self.client.close()
+            self.client=None
+
+            raise ConnectionError(f"Unable to connect to {self.host}:{self.port}") from error
 
     #execute a command on the remote server and return the output, error, and exit code
     # Linux Server gives 3 streams, stdout-> normal output, stderr->error output
