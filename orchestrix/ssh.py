@@ -1,4 +1,5 @@
 import paramiko
+from orchestrix.result import CommandResult
 
 class SSHConnection:
     def __init__(self,host,username,password=None,port=2220):
@@ -33,13 +34,12 @@ class SSHConnection:
         error=stderr.read().decode()
         exit_code=stdout.channel.recv_exit_status()
 
-        return {
-            "command":command,
-            "stdout":output,
-            "stderr":error,
-            "exit_code":exit_code,
-            "success":exit_code==0,
-        }
+        return CommandResult(
+            command=command,
+            stdout=output,
+            stderr=error,
+            exit_code=exit_code,
+        )
 
 
     def close(self):

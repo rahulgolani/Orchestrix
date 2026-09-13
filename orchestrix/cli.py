@@ -26,11 +26,11 @@ def main():
     #TEST A FAILURE
     # result=connection.execute('command-that-does-not-exist')
 
-    print("\nCommand:", result['command'])
-    print("Exit Code:", result['exit_code'])
-    print("Success:", result['success'])
-    print("Output:", result['stdout'])
-    print("Error:", result['stderr'])
+    print("\nCommand:", result.command)
+    print("Exit Code:", result.exit_code)
+    print("Success:", result.success)
+    print("Output:", result.stdout)
+    print("Error:", result.stderr)
 
     connection.close()
 
