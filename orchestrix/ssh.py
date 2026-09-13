@@ -21,6 +21,27 @@ class SSHConnection:
             password=self.password,
             )
 
+    #execute a command on the remote server and return the output, error, and exit code
+    # Linux Server gives 3 streams, stdout-> normal output, stderr->error output
+    def execute(self,command):
+        if not self.client:
+            raise RuntimeError("SSH Connection is not established")
+
+        stdin,stdout,stderr=self.client.exec_command(command)
+
+        output=stdout.read().decode()
+        error=stderr.read().decode()
+        exit_code=stdout.channel.recv_exit_status()
+
+        return {
+            "command":command,
+            "stdout":output,
+            "stderr":error,
+            "exit_code":exit_code,
+            "success":exit_code==0,
+        }
+
+
     def close(self):
         if self.client:
             self.client.close()

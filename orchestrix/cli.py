@@ -14,10 +14,23 @@ def main():
 
     print(f'Connecting to {server["host"]}...')
 
+    #Establish a connection to the remote server
     connection.connect()
 
     print(f'Connected to {server["host"]} as {server["user"]}')
     print(f'SSH Connection Successful')
+
+    #execute a command on the remote server
+    result=connection.execute('uname -a')
+
+    #TEST A FAILURE
+    # result=connection.execute('command-that-does-not-exist')
+
+    print("\nCommand:", result['command'])
+    print("Exit Code:", result['exit_code'])
+    print("Success:", result['success'])
+    print("Output:", result['stdout'])
+    print("Error:", result['stderr'])
 
     connection.close()
 
