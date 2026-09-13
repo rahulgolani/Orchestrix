@@ -1,11 +1,13 @@
 from orchestrix.ssh import SSHConnection
 from orchestrix.modules.command import CommandModule
+from orchestrix.modules.ping import PingModule
 
 class Executor:
     def __init__(self,inventory):
         self.inventory=inventory
         self.modules={
             "command":CommandModule(),
+            "ping":PingModule(),
         }
 
     def run(self,hostname,module_name,arguments):
